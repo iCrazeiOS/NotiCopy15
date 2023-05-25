@@ -1,0 +1,9 @@
+Package: com.icraze.noticopy15
+Name: NotiCopy15
+Version: 1.0.1
+Architecture: iphoneos-arm
+Description: Tap a notification with two fingers to copy its text. Hold with two fingers to copy its title.
+Maintainer: iCraze
+Author: iCraze
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
