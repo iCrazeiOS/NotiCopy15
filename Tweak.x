@@ -3,6 +3,7 @@
 @interface NCNotificationSeamlessContentView : UIView
 @property (nonatomic, retain) NSString *primaryText;
 @property (nonatomic, retain) NSString *secondaryText;
+@property (nonatomic, retain) UILongPressGestureRecognizer *noticopy_longPress;
 @end
 
 void showToastWithTextOnView(NSString *text, UIView *view) {
@@ -39,14 +40,17 @@ void showToastWithTextOnView(NSString *text, UIView *view) {
 }
 
 %hook NCNotificationSeamlessContentView
+%property (nonatomic, retain) UILongPressGestureRecognizer *noticopy_longPress;
 -(void)setFrame:(CGRect)frame {
 	%orig;
 
+	if (self.noticopy_longPress) return;
+
 	// Long press with 2 fingers to copy primary text
-	UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(noticopy_copyPrimary:)];
-	longPress.numberOfTouchesRequired = 2;
-	longPress.minimumPressDuration = 0.5;
-	[self addGestureRecognizer:longPress];
+	self.noticopy_longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(noticopy_copyPrimary:)];
+	self.noticopy_longPress.numberOfTouchesRequired = 2;
+	self.noticopy_longPress.minimumPressDuration = 0.5;
+	[self addGestureRecognizer:self.noticopy_longPress];
 
 	// Tap with 2 fingers to copy secondary text
 	UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(noticopy_copySecondary)];
